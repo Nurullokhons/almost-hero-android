@@ -112,6 +112,15 @@ func _shoot() -> void:
 	b.material_override = _mat(Color("#ffd36a"))
 	b.global_position = global_position + Vector3(0.85 * _facing, 1.15, -0.1)
 	get_parent().add_child(b)
+	var flash := MeshInstance3D.new()
+	var flash_mesh := SphereMesh.new()
+	flash_mesh.radius = 0.13
+	flash_mesh.height = 0.26
+	flash.mesh = flash_mesh
+	flash.material_override = _mat(Color("#ffb84d"))
+	flash.global_position = b.global_position + Vector3(0.18 * _facing, 0.0, -0.02)
+	get_parent().add_child(flash)
+	get_tree().create_timer(0.07).timeout.connect(flash.queue_free)
 	_bullets.append(b)
 	_bullet_dirs.append(_facing)
 
