@@ -5,8 +5,10 @@ const ENEMY_SCRIPT = preload("res://scripts/enemy.gd")
 @onready var player: CharacterBody3D = $Player
 @onready var camera: Camera3D = $Camera3D
 var _hud_label: Label
+var _health_bar: ProgressBar
 
 func _ready() -> void:
+	_build_environment()
 	_build_test_corridor()
 	_spawn_enemy(Vector3(10.0, 0.0, 0.0))
 	_spawn_enemy(Vector3(24.0, 0.0, 0.0))
@@ -15,7 +17,18 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	camera.position.x = lerpf(camera.position.x, player.position.x + 2.0, minf(delta * 4.0, 1.0))
 	if _hud_label:
-		_hud_label.text = "ALMOST HERO     HP: %d" % player.health
+		_hud_label.text = "ALMOST HERO     |     SECTOR 01"
+	if _health_bar:
+		_health_bar.value = player.health
+
+
+func _build_environment() -> void:
+	_add_decoration(Vector3(13.0, 4.0, -2.0), Vector3(48.0, 8.0, 0.35), Color("#302b2c"))
+	_add_decoration(Vector3(13.0, 0.2, -1.78), Vector3(48.0, 0.12, 0.12), Color("#9a4937"))
+	for x in range(-5, 34, 5):
+		_add_decoration(Vector3(float(x), 3.1, -1.72), Vector3(0.12, 5.8, 0.12), Color("#65413a"))
+		_add_decoration(Vector3(float(x) + 1.2, 5.2, -1.68), Vector3(1.6, 0.08, 0.08), Color("#bd7650"))
+	_add_decoration(Vector3(13.0, 5.8, -1.6), Vector3(48.0, 0.16, 0.2), Color("#514044"))
 
 func _build_test_corridor() -> void:
 	_add_block(Vector3(4.0, 0.55, 0), Vector3(1.3, 1.1, 2.5), Color("#59616a"))
@@ -60,6 +73,16 @@ func _add_decoration(pos: Vector3, dimensions: Vector3, color: Color) -> void:
 	node.material_override = _material(color)
 	add_child(node)
 
+
+func _style_box(color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = color
+	style.corner_radius_top_left = 3
+	style.corner_radius_top_right = 3
+	style.corner_radius_bottom_left = 3
+	style.corner_radius_bottom_right = 3
+	return style
+
 func _material(color: Color) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = color
@@ -79,6 +102,17 @@ func _build_touch_ui() -> void:
 	_hud_label.add_theme_font_size_override("font_size", 20)
 	_hud_label.add_theme_color_override("font_color", Color("#e7e6d8"))
 	root.add_child(_hud_label)
+
+	_health_bar = ProgressBar.new()
+	_health_bar.min_value = 0
+	_health_bar.max_value = 100
+	_health_bar.value = 100
+	_health_bar.show_percentage = false
+	_health_bar.position = Vector2(22, 52)
+	_health_bar.size = Vector2(190, 14)
+	_health_bar.add_theme_stylebox_override("background", _style_box(Color("#292323")))
+	_health_bar.add_theme_stylebox_override("fill", _style_box(Color("#bd493b")))
+	root.add_child(_health_bar)
 
 	_make_hold_button(root, "◀", Vector2(24, -100), Vector2(92, -24),
 		func(): player.touch_left = true, func(): player.touch_left = false)
