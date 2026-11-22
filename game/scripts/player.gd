@@ -24,6 +24,7 @@ var health := 100
 var _damage_cooldown := 0.0
 
 func _ready() -> void:
+	add_to_group("player")
 	_build_hero()
 
 func _physics_process(delta: float) -> void:
