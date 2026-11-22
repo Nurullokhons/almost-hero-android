@@ -5,10 +5,11 @@ Lightweight Godot 4 side-view 3D action prototype for Android.
 ## Current prototype
 - Fixed side camera that follows the player horizontally.
 - Procedural cartoon soldier in green armor and helmet.
-- Simple walk animation.
 - Left/right movement, jump, roll and projectile shooting.
 - Touchscreen buttons: left, right, jump, fire and roll.
-- Small obstacle corridor built from primitive geometry.
+- Starter corridor with simple obstacles.
+- Two patrol enemies with health; projectiles damage them.
+- Player health display and contact damage.
 - Compatibility renderer (OpenGL ES 3); no external textures or large assets.
 
 ## Desktop test controls
@@ -27,10 +28,11 @@ Lightweight Godot 4 side-view 3D action prototype for Android.
 ## Target test device
 Realme C11 (2021), Android 11, 2 GB RAM.
 
-## Next steps
-1. Validate the project in Godot and fix any engine/parser issues.
-2. Add enemies, damage and a basic health display.
-3. Improve the soldier silhouette and environment art while keeping the low-memory budget.
-4. Export a debug APK and test on the target phone.
+## Current status
+The project files are committed, but the scene has not yet been launched in the Godot editor or exported to an APK. Engine validation and device testing are still required.
 
-The current soldier and environment are deliberately built from simple 3D primitives. This keeps the prototype small while gameplay and device performance are validated.
+## Next steps
+1. Open this folder in Godot 4 and validate the scene/scripts.
+2. Fix any engine/parser issues found during the first run.
+3. Tune controls and performance on the target phone.
+4. Export a debug APK for device testing.
