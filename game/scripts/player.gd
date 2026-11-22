@@ -125,7 +125,7 @@ func _update_bullets(delta: float) -> void:
 			b.global_position.x += _bullet_dirs[i] * bullet_speed * delta
 			var hit_enemy := false
 			for enemy in get_tree().get_nodes_in_group("enemies"):
-				if is_instance_valid(enemy) and enemy.global_position.distance_to(b.global_position) < 0.8:
+				if is_instance_valid(enemy) and (enemy.global_position + Vector3(0, 1.0, 0)).distance_to(b.global_position) < 0.8:
 					enemy.take_damage(25)
 					hit_enemy = true
 					break
