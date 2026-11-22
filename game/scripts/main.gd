@@ -1,17 +1,21 @@
 extends Node3D
 
+const ENEMY_SCRIPT = preload("res://scripts/enemy.gd")
+
 @onready var player: CharacterBody3D = $Player
 @onready var camera: Camera3D = $Camera3D
 var _hud_label: Label
 
 func _ready() -> void:
 	_build_test_corridor()
+	_spawn_enemy(Vector3(10.0, 0.0, 0.0))
+	_spawn_enemy(Vector3(24.0, 0.0, 0.0))
 	_build_touch_ui()
 
 func _process(delta: float) -> void:
 	camera.position.x = lerpf(camera.position.x, player.position.x + 2.0, minf(delta * 4.0, 1.0))
 	if _hud_label:
-		_hud_label.text = "ALMOST HERO     TEST ZONE"
+		_hud_label.text = "ALMOST HERO     HP: %d" % player.health
 
 func _build_test_corridor() -> void:
 	_add_block(Vector3(4.0, 0.55, 0), Vector3(1.3, 1.1, 2.5), Color("#59616a"))
@@ -23,6 +27,13 @@ func _build_test_corridor() -> void:
 	_add_decoration(Vector3(5.5, 2.8, -1.0), Vector3(0.12, 5.0, 0.12), Color("#8a6b42"))
 	_add_decoration(Vector3(15.0, 2.8, -1.0), Vector3(0.12, 5.0, 0.12), Color("#8a6b42"))
 	_add_decoration(Vector3(25.0, 2.8, -1.0), Vector3(0.12, 5.0, 0.12), Color("#8a6b42"))
+
+
+func _spawn_enemy(pos: Vector3) -> void:
+	var enemy := Node3D.new()
+	enemy.set_script(ENEMY_SCRIPT)
+	enemy.position = pos
+	add_child(enemy)
 
 func _add_block(pos: Vector3, dimensions: Vector3, color: Color) -> void:
 	var body := StaticBody3D.new()
