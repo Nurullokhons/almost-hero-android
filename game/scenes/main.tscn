@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 
@@ -8,10 +8,15 @@ size = Vector3(36, 1, 3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
 size = Vector3(36, 1, 3)
 
-[node name="Main" type="Node3D"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
+radius = 0.35
+height = 1.5
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_world")
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+radius = 0.35
+height = 1.5
+
+[node name="Main" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 position = Vector3(0, 3, 15)
@@ -40,11 +45,11 @@ script = ExtResource("1_player")
 
 [node name="BodyMesh" type="MeshInstance3D" parent="Player"]
 position = Vector3(0, 0.65, 0)
-mesh = CapsuleMesh.new()
+mesh = SubResource("CapsuleMesh_player")
 
 [node name="BodyCollision" type="CollisionShape3D" parent="Player"]
 position = Vector3(0, 0.65, 0)
-shape = CapsuleShape3D.new()
+shape = SubResource("CapsuleShape3D_player")
 
 [node name="CameraTarget" type="Marker3D" parent="Player"]
 position = Vector3(0, 1, 0)
