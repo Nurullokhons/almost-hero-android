@@ -20,12 +20,15 @@ var _bullet_dirs: Array[float] = []
 var _visual: Node3D
 var _left_leg: Node3D
 var _right_leg: Node3D
+var health := 100
+var _damage_cooldown := 0.0
 
 func _ready() -> void:
 	_build_hero()
 
 func _physics_process(delta: float) -> void:
 	_fire_timer = maxf(0.0, _fire_timer - delta)
+	_damage_cooldown = maxf(0.0, _damage_cooldown - delta)
 	_roll_timer = maxf(0.0, _roll_timer - delta)
 	var dir := float(touch_right or Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT)) - float(touch_left or Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT))
 	if dir != 0.0:
@@ -119,7 +122,22 @@ func _update_bullets(delta: float) -> void:
 			_bullet_dirs.remove_at(i)
 		else:
 			b.global_position.x += _bullet_dirs[i] * bullet_speed * delta
-			if absf(b.global_position.x-global_position.x) > 22.0:
+			var hit_enemy := false
+			for enemy in get_tree().get_nodes_in_group("enemies"):
+				if is_instance_valid(enemy) and enemy.global_position.distance_to(b.global_position) < 0.8:
+					enemy.take_damage(25)
+					hit_enemy = true
+					break
+			if hit_enemy or absf(b.global_position.x-global_position.x) > 22.0:
 				b.queue_free()
 				_bullets.remove_at(i)
 				_bullet_dirs.remove_at(i)
+
+func take_damage(amount: int) -> void:
+	if _damage_cooldown > 0.0:
+		return
+	health = maxi(0, health - amount)
+	_damage_cooldown = 0.8
+	if health == 0:
+		global_position = Vector3(-3, 0.76, 0)
+		health = 100
