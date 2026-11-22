@@ -7,6 +7,8 @@ extends CharacterBody3D
 @export var jump_velocity: float = 7.0
 @export var gravity: float = 18.0
 
+var _jump_was_down := false
+
 func _physics_process(delta: float) -> void:
 	var direction := 0.0
 
@@ -18,9 +20,11 @@ func _physics_process(delta: float) -> void:
 	velocity.x = direction * move_speed
 	velocity.z = 0.0
 
+	var jump_down := Input.is_key_pressed(KEY_SPACE) or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-	elif (Input.is_key_pressed(KEY_SPACE) or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)) and Input.is_action_just_pressed("ui_accept"):
+	elif jump_down and not _jump_was_down:
 		velocity.y = jump_velocity
 
+	_jump_was_down = jump_down
 	move_and_slide()
